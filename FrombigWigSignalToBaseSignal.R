@@ -1,3 +1,5 @@
+library(rtracklayer)
+library(ChIPpeakAnno)
 generate_signal_basewise <- function(data_path, genome_region_bedFile_path, output_path){
  genome_region_bedFile <- read.table(genome_region_bedFile_path, sep = "\t", stringsAsFactors = F)
  chr_name <- paste0("chr", c(1:22, "X", "Y"))
