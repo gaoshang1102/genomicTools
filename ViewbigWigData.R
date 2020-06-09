@@ -1,28 +1,28 @@
-generate_signal_basewise <- function(data_path, genome_region_bedFile){
- <- import(data_path, format = "BigWig")
-H3K4me3 <- data.frame(chr = as.character(seqnames(H3K4me3)),
-                      start = start(H3K4me3),
-                      end = end(H3K4me3),
-                      score = score(H3K4me3),
+generate_signal_basewise <- function(data_path, genome_region_bedFile, output_path){
+ chr_name <- paste0("chr", c(1:22, "X", "Y"))
+ bigWig_data <- import(data_path, format = "BigWig")
+ bigWig_data <- data.frame(chr = as.character(seqnames(bigWig_data)),
+                      start = start(bigWig_data),
+                      end = end(bigWig_data),
+                      score = score(bigWig_data),
                       stringsAsFactors=F)
-
-gene_H3K4me3 <- list()
-for(i in chr_name){
-  gene_H3K4me3_chr <- list()
-  hg38_promoter_chr <- hg38_promoter[hg38_promoter$chr == i, ]
-  H3K4me3_chr <- H3K4me3[H3K4me3$chr == i, ]
-  H3K4me3_score <- rep(H3K4me3_chr$score, H3K4me3_chr$end - H3K4me3_chr$start + 1)
-  for(j in 1:nrow(hg38_promoter_chr)){
-    if(hg38_promoter_chr$strand[j] == "+"){
-      gene_H3K4me3_chr[[hg38_promoter_chr$ensembl_ID[j]]] <- H3K4me3_score[hg38_promoter_chr$start[j]:hg38_promoter_chr$end[j]]
+ gene_bigWig_data <- list()
+ for(i in chr_name){
+  gene_bigWig_data_chr <- list()
+  genome_region_bedFile_chr <- genome_region_bedFile[genome_region_bedFile$chr == i, ]
+  bigWig_data_chr <- bigWig_data[bigWig_data$chr == i, ]
+  bigWig_data_score <- rep(bigWig_data_chr$score, bigWig_data_chr$end - bigWig_data_chr$start + 1)
+  for(j in 1:nrow(genome_region_bedFile_chr)){
+    if(genome_region_bedFile_chr$strand[j] == "+"){
+      gene_bigWig_data_chr[[genome_region_bedFile_chr$ensembl_ID[j]]] <- bigWig_data_score[genome_region_bedFile_chr$start[j]:genome_region_bedFile_chr$end[j]]
     }else{
-      gene_H3K4me3_chr[[hg38_promoter_chr$ensembl_ID[j]]] <- rev(H3K4me3_score[hg38_promoter_chr$start[j]:hg38_promoter_chr$end[j]])
+      gene_bigWig_data_chr[[genome_region_bedFile_chr$ensembl_ID[j]]] <- rev(bigWig_data_score[genome_region_bedFile_chr$start[j]:genome_region_bedFile_chr$end[j]])
     }
   }
-  gene_H3K4me3[[i]] <- as.data.frame(do.call(rbind, gene_H3K4me3_chr))
+  gene_bigWig_data[[i]] <- as.data.frame(do.call(rbind, gene_bigWig_data_chr))
 }
-gene_H3K4me3 <- do.call(rbind, gene_H3K4me3)
-gene_H3K4me3 <- gene_H3K4me3[hg38_promoter$rowname, ]
-sum(rownames(gene_H3K4me3) == hg38_promoter$rowname)
-save(gene_H3K4me3, file = "/SingleCell/Shang/Data/HepG2/H3K4me3_2500bp.RData")
+gene_bigWig_data <- do.call(rbind, gene_bigWig_data)
+gene_bigWig_data <- gene_bigWig_data[genome_region_bedFile$rowname, ]
+sum(rownames(gene_bigWig_data) == genome_region_bedFile$rowname)
+save(gene_bigWig_data, file = output_path)
 }
