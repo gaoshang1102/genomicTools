@@ -20,9 +20,10 @@ generate_signal_basewise <- function(data_path, genome_region_bedFile, output_pa
     }
   }
   gene_bigWig_data[[i]] <- as.data.frame(do.call(rbind, gene_bigWig_data_chr))
-}
-gene_bigWig_data <- do.call(rbind, gene_bigWig_data)
-gene_bigWig_data <- gene_bigWig_data[genome_region_bedFile$rowname, ]
-sum(rownames(gene_bigWig_data) == genome_region_bedFile$rowname)
-save(gene_bigWig_data, file = output_path)
+ }
+  gene_bigWig_data <- do.call(rbind, gene_bigWig_data)
+  gene_bigWig_data <- gene_bigWig_data[genome_region_bedFile$rowname, ]
+  print(sum(rownames(gene_bigWig_data) == genome_region_bedFile$rowname))
+  save(gene_bigWig_data, file = output_path)
+  return(gene_bigWig_data)
 }
