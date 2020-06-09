@@ -1,4 +1,5 @@
-generate_signal_basewise <- function(data_path, genome_region_bedFile, output_path){
+generate_signal_basewise <- function(data_path, genome_region_bedFile_path, output_path){
+ genome_region_bedFile <- read.table(genome_region_bedFile_path, sep = "\t", stringsAsFactors = F)
  chr_name <- paste0("chr", c(1:22, "X", "Y"))
  bigWig_data <- import(data_path, format = "BigWig")
  bigWig_data <- data.frame(chr = as.character(seqnames(bigWig_data)),
