@@ -1,4 +1,4 @@
-view_individual_gene_importance <- function(importance_matrix, geneName){
+view_individual_gene_importance <- function(importance_matrix, geneName, epi_type = "ALL"){
   tmp <- matrix(unname(unlist(importance_matrix[geneName. ])), nrow = 2500, byrow = F)
   df <- data.frame(site =seq(1, 2500))
   df$DNase <- tmp[, 1]
@@ -17,7 +17,14 @@ view_individual_gene_importance <- function(importance_matrix, geneName){
   df$WGBS <-  loess(df$WGBS ~ df$site, span=0.1)$fitted
   df <- gather(df, "epi", "importance", 2:8)
   df$epi <- factor(df$epi, levels = c("DNase", "H3K4me1", "H3K4me3", "H3K9me3", "H3K27me3", "H3K36me3", "WGBS"))
-  plots <- ggplot(df, aes(site, importance, color = epi)) +
+  if(epi_type != "ALL"){
+    df_sub <- df[df$epi %in% epi_type, ]
+    plots <- ggplot(df_sub, aes(site, importance, color = epi)) +
           geom_point() + theme_bw()
-  return(plots)
+    return(plots)
+  }else{
+    plots <- ggplot(df, aes(site, importance, color = epi)) +
+          geom_point() + theme_bw()
+    return(plots)
+  }
  }
