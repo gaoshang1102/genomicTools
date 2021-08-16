@@ -23,11 +23,15 @@ samtools view -h -S -b -o myfav_aln_unsorted.bam myfav_aln_unsorted.sam
 
 #### sambamba ####
 # install #
+# check latest sambamba version #
 
 wget https://github.com/biod/sambamba/releases/download/v0.6.8/sambamba-0.6.8-linux-static.gz
 gunzip sambamba-0.6.8-linux-static.gz
 chmod +x sambamba-0.6.8
-#### 
-./sambamba sort -t 2
 
+#### sort bam file ####
+./sambamba-0.8.1-linux-amd64-static sort -t 20 -o myfav_aln_sorted.bam myfav_aln_unsorted.bam 
 
+#### Filtering uniquely mapping reads ####
+
+~/sambamba-0.8.1-linux-amd64-static view -h -t 20 -f bam -F "[XS] == null and not unmapped  and not duplicate" myfav_aln_sorted.bam > myfav_aln_unique.bam
