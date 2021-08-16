@@ -35,3 +35,13 @@ chmod +x sambamba-0.6.8
 #### Filtering uniquely mapping reads ####
 
 ~/sambamba-0.8.1-linux-amd64-static view -h -t 20 -f bam -F "[XS] == null and not unmapped  and not duplicate" myfav_aln_sorted.bam > myfav_aln_unique.bam
+
+#### MACS2 for single end ChIP-seq ####
+
+macs2 callpeak -t myfav_aln_unique.bam \
+	-c myfav_input_aln_unique.bam \
+ 	-f BAM -g 1.3e+8 \
+	-n myfav \
+  -B 
+  --nomodel --extsize 'd' ## these two augments are for SE data
+	--outdir macs2
