@@ -1,0 +1,16 @@
+#### fastq files downloaded from SRR sometimes have blank lines. Remove the blank lines first. ####
+
+sed '/^$/d' myfav.fastq > myfav_remove_blank.fastq
+
+#### remove the adapter with cutadapt ####
+#### adapter usually is illumina universal adapter. Use Fastqc to verify the adapter. ####
+#### Single end 
+cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -j 10 -m 10 -o myfav_trimmed.fastq myfav_remove_blank.fastq
+
+#### Paired end:
+Please see the cutadapt documentation
+
+#### bowtie2 ####
+
+bowtie2 -p 20 -q --local -x /Shang_PHD/bowtie2_index/hg38/hg38 -U myfav_trimmed.fastq -S myfav_aln_unsorted.sam
+
