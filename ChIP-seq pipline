@@ -30,7 +30,7 @@ gunzip sambamba-0.6.8-linux-static.gz
 chmod +x sambamba-0.6.8
 
 #### sort bam file ####
-./sambamba-0.8.1-linux-amd64-static sort -t 20 -o myfav_aln_sorted.bam myfav_aln_unsorted.bam 
+~/sambamba-0.8.1-linux-amd64-static sort -t 20 -o myfav_aln_sorted.bam myfav_aln_unsorted.bam 
 
 #### Filtering uniquely mapping reads ####
 
