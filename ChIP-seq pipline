@@ -14,3 +14,20 @@ Please see the cutadapt documentation
 
 bowtie2 -p 20 -q --local -x /Shang_PHD/bowtie2_index/hg38/hg38 -U myfav_trimmed.fastq -S myfav_aln_unsorted.sam
 
+#### filtering reads ####
+#1,Change alignment file format from SAM to BAM
+#2,Sort BAM file by read coordinate locations
+#3,Filter to keep only uniquely mapping reads (this will also remove any unmapped reads)
+
+samtools view -h -S -b -o myfav_aln_unsorted.bam myfav_aln_unsorted.sam
+
+#### sambamba ####
+# install #
+
+wget https://github.com/biod/sambamba/releases/download/v0.6.8/sambamba-0.6.8-linux-static.gz
+gunzip sambamba-0.6.8-linux-static.gz
+chmod +x sambamba-0.6.8
+#### 
+./sambamba sort -t 2
+
+
